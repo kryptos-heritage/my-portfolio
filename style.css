@@ -1,0 +1,580 @@
+/* RESET & BASE STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+body {
+    background-color: #050505;
+    color: #ffffff;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* --- 3D BLACK & WHITE WAVE BACKGROUND --- */
+#vanta-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #000000;
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #000000 0%, #222222 25%, #666666 50%, #111111 75%, #000000 100%);
+    background-size: 200% 200%;
+    animation: wave3D 8s ease-in-out infinite alternate;
+    overflow: hidden;
+    will-change: background-position;
+}
+
+@keyframes wave3D {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* --- GENERAL TEXT: GOLD & SILVER SHIMMER WAVE EFFECT --- */
+body, h1, h2, h3, h4, h5, h6, p, .section-title, .glow-text, .user-name, .live-status, .card-watermark, .nft-desc-wrapper {
+    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%),
+                linear-gradient(90deg, #e0e0e0 0%, #ffffff 50%, #b0b0b0 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: goldSilverWave 4s linear infinite;
+    text-shadow: none;
+    will-change: background-position;
+}
+
+@keyframes goldSilverWave {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* --- ADMIN DASHBOARD TEXT FIXES --- */
+.admin-content, .admin-content p, .admin-content span, .admin-content label {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    color: #000000 !important;
+    animation: none !important;
+}
+
+.admin-content h2, .admin-content h3 {
+    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%) !important;
+    background-size: 200% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: goldSilverWave 4s linear infinite !important;
+    text-shadow: none !important;
+    margin-bottom: 10px;
+}
+
+/* --- SILVER BOXES WITH PANNING EFFECT --- */
+.glassmorphism {
+    background: linear-gradient(135deg, #a0a0a0, #505050); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.glassmorphism::before,
+.nft-card::before,
+.collector-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    z-index: -1;
+    animation: silverPanEffect 3s infinite alternate ease-in-out;
+    pointer-events: none;
+    will-change: transform;
+}
+
+@keyframes silverPanEffect {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(300%); }
+}
+
+.glassmorphism:hover, 
+.nft-card:hover, 
+.collector-card:hover {
+    box-shadow: 0 12px 40px rgba(220, 220, 220, 0.2), 0 0 25px rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* NAVBAR & GLOWING EYE */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    margin: 20px 40px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.live-status {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.glowing-eye {
+    width: 18px;
+    height: 18px;
+    stroke: #ffffff;
+    filter: drop-shadow(0 0 6px #ffffff);
+    animation: eyePulse 2s infinite ease-in-out;
+}
+
+@keyframes eyePulse {
+    0%, 100% { opacity: 0.3; filter: drop-shadow(0 0 2px #ffffff); }
+    50% { opacity: 1; filter: drop-shadow(0 0 10px #ffffff); }
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    object-fit: cover;
+}
+
+.user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* GOOGLE BUTTON FIXED */
+.google-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-image: none !important;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.3s ease;
+}
+
+.google-btn span, .google-btn {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    background: none !important;
+}
+
+.google-btn:hover {
+    background: #333;
+}
+
+.google-btn img {
+    width: 18px !important;
+    height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+}
+
+/* --- ADMIN LOCK BUTTON --- */
+.lock-btn {
+    background: transparent;
+    color: #ffffff;
+    border: none;
+    font-size: 1.2rem;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: none;
+    filter: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.85;
+}
+
+.lock-btn:hover {
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-bottom: 60px;
+}
+
+/* PROFILE SECTION */
+.profile-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.profile-avatar img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fcf6ba;
+    box-shadow: 0 0 15px rgba(191, 149, 63, 0.5), 0 0 30px rgba(252, 246, 186, 0.3);
+    animation: profileGoldPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes profileGoldPulse {
+    0% {
+        box-shadow: 0 0 10px rgba(191, 149, 63, 0.4), 0 0 20px rgba(170, 119, 28, 0.2);
+        transform: scale(0.97);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(252, 246, 186, 0.9), 0 0 50px rgba(191, 149, 63, 0.7);
+        transform: scale(1.04);
+    }
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-left: 4px solid #fff;
+    padding-left: 10px;
+}
+
+/* COLLECTORS & NFT GRID */
+.collector-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.collector-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nft-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.nft-card {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nft-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #111;
+    cursor: pointer;
+}
+
+.nft-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.card-watermark {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+.nft-desc-wrapper {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.read-more-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.card-footer-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.outline-like-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-image: none !important;
+}
+
+.outline-like-btn span, .like-count {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+}
+
+.heart-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+    transition: all 0.3s ease;
+}
+
+.outline-like-btn.liked .heart-icon {
+    filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #ffffff);
+    stroke-width: 2.5;
+}
+
+/* BADGES FIXED */
+.badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    background-image: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+}
+
+.badge-available { 
+    background: rgba(0, 255, 102, 0.25); 
+    color: #00ff66 !important; 
+    -webkit-text-fill-color: #00ff66 !important;
+    border: 1px solid #00ff66; 
+}
+
+.badge-sold { 
+    background: rgba(255, 51, 51, 0.25); 
+    color: #ff3333 !important; 
+    -webkit-text-fill-color: #ff3333 !important;
+    border: 1px solid #ff3333; 
+}
+
+/* PREVIEW MODAL */
+.preview-modal-content {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 45px 25px 25px 25px;
+    border-radius: 16px;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+}
+
+.preview-modal-content .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-image: none !important;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: background 0.3s;
+}
+
+.preview-modal-content .close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.watermarked-image-container {
+    position: relative;
+    max-width: 100%;
+    max-height: 65vh;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.watermarked-image-container img {
+    max-width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.watermark-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* CONTACT & ADMIN STYLES */
+.contact-section { padding: 30px; }
+
+/* --- ADMIN PANEL MODAL --- */
+.admin-modal { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.85); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 100; 
+}
+
+.hidden { display: none !important; }
+
+.admin-content { 
+    width: 90%; 
+    max-width: 500px; 
+    max-height: 85vh; 
+    padding: 30px 25px 25px 25px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column; 
+    background: #ffffff; 
+    color: #000000; 
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.3);
+    animation: adminGlow 2.5s infinite alternate;
+}
+
+@keyframes adminGlow {
+    0% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+    100% { box-shadow: 0 0 35px rgba(255, 255, 255, 1); }
+}
+
+.admin-content .close-btn { 
+    position: absolute; 
+    top: 8px; 
+    right: 15px; 
+    font-size: 1.8rem; 
+    cursor: pointer; 
+    z-index: 999;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background: none !important;
+}
+
+input, textarea, select { 
+    width: 100%; 
+    padding: 12px; 
+    background: #f5f5f5; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-image: none !important;
+}
+
+button, .primary-btn, input[type="submit"], input[type="button"] {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.primary-btn { 
+    padding: 12px; 
+    background: #000000; 
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+.admin-scroll-area { overflow-y: auto; margin-top: 15px; display: flex; flex-direction: column; gap: 20px; }
+.admin-group { display: flex; flex-direction: column; gap: 10px; }
+.divider { border: 0; height: 1px; background: rgba(0, 0, 0, 0.1); }
+.admin-items-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-item-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #f9f9f9; 
+    padding: 10px; 
+    border-radius: 8px; 
+    border: 1px solid #ddd; 
+}
+.action-btn { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.75rem; font-weight: bold; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+.btn-toggle { background: #2196F3; color: #fff !important; }
+.btn-delete { background: #f44336; color: #fff !important; }
