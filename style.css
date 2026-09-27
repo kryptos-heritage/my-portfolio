@@ -1,132 +1,65 @@
-/* RESET & BASE STYLES */
+/* ============================================================
+   KRYPTOS HERITAGE - WEB3 CYBERPUNK PREMIUM STYLESHEET
+   ============================================================ */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
-    -webkit-user-drag: none;
-}
-
-img, svg {
-    max-width: 100%;
-    height: auto;
-    display: inline-block;
 }
 
 body {
-    background-color: #050505;
-    color: #ffffff;
+    background-color: #0a0a0c;
+    color: #e0e0e0;
+    min-height: 100vh;
     overflow-x: hidden;
     position: relative;
-    min-height: 100vh;
+    user-select: none;
 }
 
-/* --- 3D BLACK & WHITE WAVE BACKGROUND --- */
+/* Background Animation Layer */
 #vanta-bg {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: -1;
-    background-color: #000000;
-    background-image: 
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #000000 0%, #222222 25%, #666666 50%, #111111 75%, #000000 100%);
-    background-size: 200% 200%;
-    animation: wave3D 8s ease-in-out infinite alternate;
-    overflow: hidden;
-    will-change: background-position;
+    background: radial-gradient(circle at 50% 50%, #12141d 0%, #050508 100%);
 }
 
-@keyframes wave3D {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
-}
-
-/* --- GENERAL TEXT: GOLD & SILVER SHIMMER WAVE EFFECT --- */
-h1, h2, h3, h4, h5, h6, .section-title, .glow-text, .profile-name, .card-watermark {
-    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: goldSilverWave 4s linear infinite;
-    will-change: background-position;
-}
-
-@keyframes goldSilverWave {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-}
-
-/* --- ADMIN DASHBOARD TEXT FIXES --- */
-.admin-content, .admin-content p, .admin-content span, .admin-content label {
-    background: none !important;
-    -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: initial !important;
-    color: #000000 !important;
-    animation: none !important;
-}
-
-.admin-content h2, .admin-content h3 {
-    background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%) !important;
-    background-size: 200% auto !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    animation: goldSilverWave 4s linear infinite !important;
-    margin-bottom: 10px;
-}
-
-/* --- SILVER BOXES WITH PANNING EFFECT --- */
+/* Glassmorphism Effect */
 .glassmorphism {
-    background: rgba(40, 40, 40, 0.65); 
+    background: rgba(18, 18, 24, 0.75);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    position: relative;
-    z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.glassmorphism::before,
-.nft-card::before,
-.collector-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -150%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-    z-index: -1;
-    animation: silverPanEffect 4s infinite alternate ease-in-out;
-    pointer-events: none;
+/* Glow Text */
+.glow-text {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.2);
 }
 
-@keyframes silverPanEffect {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(300%); }
-}
-
-.glassmorphism:hover, 
-.nft-card:hover, 
-.collector-card:hover {
-    box-shadow: 0 12px 40px rgba(220, 220, 220, 0.2), 0 0 25px rgba(255, 255, 255, 0.15);
-    transform: translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* NAVBAR & GLOWING EYE */
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    margin: 20px 40px;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.15);
+}
+
+.logo h2 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    font-weight: 800;
 }
 
 .header-right {
@@ -136,223 +69,196 @@ h1, h2, h3, h4, h5, h6, .section-title, .glow-text, .profile-name, .card-waterma
 }
 
 .live-status {
-    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #e0e0e0;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #aaa;
 }
 
 .glowing-eye {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px;
-    min-height: 18px;
-    stroke: #ffffff;
-    filter: drop-shadow(0 0 6px #ffffff);
-    animation: eyePulse 2s infinite ease-in-out;
-    flex-shrink: 0;
+    stroke: #00ff66;
+    filter: drop-shadow(0 0 5px #00ff66);
+    animation: pulseEye 2s infinite;
 }
 
-@keyframes eyePulse {
-    0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 2px #ffffff); }
-    50% { opacity: 1; filter: drop-shadow(0 0 10px #ffffff); }
+@keyframes pulseEye {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.9); }
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid #fff;
-    object-fit: cover;
-}
-
-.user-name {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-/* GOOGLE BUTTON FIXED */
 .google-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #1e1e1e;
-    border: 1px solid #555;
-    color: #ffffff !important;
+    background: linear-gradient(135deg, #007bff, #00f3ff);
+    color: #fff;
+    border: none;
     padding: 8px 16px;
     border-radius: 20px;
     cursor: pointer;
+    font-weight: 600;
     font-size: 0.85rem;
-    transition: background 0.3s ease;
-}
-
-.google-btn span {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
+    transition: all 0.3s ease;
 }
 
 .google-btn:hover {
-    background: #333333;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+    transform: translateY(-1px);
 }
 
-.google-btn img {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px;
-    min-height: 18px;
-    object-fit: contain !important;
-    flex-shrink: 0;
-}
-
-/* --- ADMIN LOCK BUTTON --- */
-.lock-btn {
-    background: transparent;
-    color: #ffffff;
+.action-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
     border: none;
-    font-size: 1.2rem;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    opacity: 0.85;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
 }
 
-.lock-btn:hover {
-    transform: scale(1.1);
-    opacity: 1;
+.btn-delete {
+    background: #ff3366;
+    color: #fff;
 }
 
+.btn-delete:hover {
+    background: #e02050;
+    box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+}
+
+.btn-toggle {
+    background: #007bff;
+    color: #fff;
+}
+
+/* Container */
 .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    padding-bottom: 60px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
-/* PROFILE SECTION */
+/* Profile Section */
 .profile-section {
     text-align: center;
-    padding: 40px 20px;
+    padding: 35px 20px;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(0, 243, 255, 0.2);
 }
 
 .profile-avatar img {
-    width: 130px;
-    height: 130px;
     border-radius: 50%;
+    border: 3px solid #00f3ff;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    margin-bottom: 15px;
     object-fit: cover;
-    border: 2px solid #fcf6ba;
-    box-shadow: 0 0 15px rgba(191, 149, 63, 0.5), 0 0 30px rgba(252, 246, 186, 0.3);
-    animation: profileGoldPulse 3s infinite alternate ease-in-out;
 }
 
-@keyframes profileGoldPulse {
-    0% {
-        box-shadow: 0 0 10px rgba(191, 149, 63, 0.4), 0 0 20px rgba(170, 119, 28, 0.2);
-        transform: scale(0.97);
-    }
-    100% {
-        box-shadow: 0 0 25px rgba(252, 246, 186, 0.9), 0 0 50px rgba(191, 149, 63, 0.7);
-        transform: scale(1.04);
-    }
+.profile-name {
+    font-size: 2rem;
+    margin-bottom: 8px;
 }
 
 .profile-bio {
-    color: #ccc;
-    margin-top: 8px;
+    color: #aaa;
     font-size: 0.95rem;
 }
 
+/* Section Titles */
 .section-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
-    border-left: 4px solid #fff;
-    padding-left: 10px;
+    letter-spacing: 1px;
 }
 
-/* COLLECTORS & NFT GRID */
+/* Collectors Grid */
+.collectors-section {
+    margin-bottom: 40px;
+}
+
 .collector-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 15px;
 }
 
 .collector-card {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    font-size: 0.85rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* NFT Grid */
 .nft-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
 }
 
 .nft-card {
-    padding: 20px;
+    border-radius: 14px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .nft-img-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
+    height: 250px;
     border-radius: 10px;
-    background: #111;
+    overflow: hidden;
     cursor: pointer;
+    margin-bottom: 15px;
 }
 
 .nft-img-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    pointer-events: none;
+    transition: transform 0.4s ease;
+}
+
+.nft-img-wrapper:hover img {
+    transform: scale(1.05);
 }
 
 .card-watermark {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-    pointer-events: none;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.nft-card h3 {
+    font-size: 1.15rem;
+    color: #fff;
+    margin-bottom: 8px;
 }
 
 .nft-desc-wrapper {
     font-size: 0.85rem;
+    color: #bbb;
+    margin-bottom: 15px;
     line-height: 1.4;
-    color: #ddd;
-    flex-grow: 1;
 }
 
 .read-more-btn {
     background: none;
     border: none;
+    color: #00f3ff;
     cursor: pointer;
     font-weight: bold;
-    font-size: 0.85rem;
-    color: #fcf6ba;
+    margin-left: 5px;
 }
 
 .card-footer-action {
@@ -362,111 +268,171 @@ h1, h2, h3, h4, h5, h6, .section-title, .glow-text, .profile-name, .card-waterma
     margin-top: auto;
 }
 
-.outline-like-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem;
-    padding: 4px 8px;
-    color: #ffffff !important;
-}
-
-.outline-like-btn span {
-    color: #ffffff !important;
-}
-
-.heart-icon {
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: #ffffff;
-    stroke-width: 2;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
-    transition: all 0.3s ease;
-}
-
-.outline-like-btn.liked .heart-icon {
-    fill: #ffffff;
-    filter: drop-shadow(0 0 10px #ffffff);
-}
-
-/* BADGES FIXED */
 .badge {
-    padding: 4px 12px;
+    padding: 4px 10px;
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: bold;
 }
 
-.badge-available { 
-    background: rgba(0, 255, 102, 0.2); 
-    color: #00ff66 !important; 
-    border: 1px solid #00ff66; 
+.badge-available {
+    background: rgba(0, 255, 102, 0.15);
+    color: #00ff66;
+    border: 1px solid #00ff66;
 }
 
-.badge-sold { 
-    background: rgba(255, 51, 51, 0.2); 
-    color: #ff3333 !important; 
-    border: 1px solid #ff3333; 
+.badge-sold {
+    background: rgba(255, 51, 102, 0.15);
+    color: #ff3366;
+    border: 1px solid #ff3366;
 }
 
-/* PREVIEW MODAL */
-.preview-modal-content {
-    background: rgba(15, 15, 15, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 45px 25px 25px 25px;
+.outline-like-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.outline-like-btn.liked {
+    border-color: #ff3366;
+    color: #ff3366;
+    background: rgba(255, 51, 102, 0.1);
+}
+
+.heart-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 30px;
     border-radius: 16px;
-    max-width: 90vw;
-    max-height: 90vh;
+    margin-top: 50px;
+}
+
+.contact-section form {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    gap: 15px;
+    margin-top: 15px;
 }
 
-.preview-modal-content .close-btn {
+.contact-section input, .contact-section textarea {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #121212;
+    color: #fff;
+    outline: none;
+}
+
+.primary-btn {
+    padding: 12px;
+    background: linear-gradient(135deg, #00f3ff, #007bff);
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+}
+
+/* Modal Styles */
+.admin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.admin-content {
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    border-radius: 16px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.close-btn {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     font-size: 1.8rem;
     cursor: pointer;
-    z-index: 999;
-    background: rgba(0, 0, 0, 0.7);
-    color: #ffffff !important;
-    width: 35px;
-    height: 35px;
+    color: #aaa;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.admin-scroll-area {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.admin-group {
+    margin-bottom: 20px;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-group input, .admin-group textarea, .admin-group select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.admin-item-row {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: background 0.3s;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    margin-bottom: 6px;
 }
 
-.preview-modal-content .close-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
+/* Watermark Preview Overlay */
 .watermarked-image-container {
     position: relative;
-    max-width: 100%;
-    max-height: 65vh;
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-.watermarked-image-container img {
-    max-width: 100%;
-    max-height: 65vh;
-    object-fit: contain;
-    pointer-events: none;
+    display: inline-block;
 }
 
 .watermark-overlay {
@@ -474,101 +440,11 @@ h1, h2, h3, h4, h5, h6, .section-title, .glow-text, .profile-name, .card-waterma
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.25);
-    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 3px;
     white-space: nowrap;
     pointer-events: none;
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
 }
-
-/* CONTACT & ADMIN STYLES */
-.contact-section { 
-    padding: 30px; 
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-#contactForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* --- ADMIN PANEL MODAL --- */
-.admin-modal { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0, 0, 0, 0.85); 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 100; 
-}
-
-.hidden { display: none !important; }
-
-.admin-content { 
-    width: 90%; 
-    max-width: 500px; 
-    max-height: 85vh; 
-    padding: 30px 25px 25px 25px; 
-    position: relative; 
-    display: flex; 
-    flex-direction: column; 
-    background: #ffffff; 
-    color: #000000; 
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-}
-
-.admin-content .close-btn { 
-    position: absolute; 
-    top: 8px; 
-    right: 15px; 
-    font-size: 1.8rem; 
-    cursor: pointer; 
-    z-index: 999;
-    color: #000000 !important;
-}
-
-input, textarea, select { 
-    width: 100%; 
-    padding: 12px; 
-    background: #f5f5f5; 
-    border: 1px solid #ccc; 
-    border-radius: 8px; 
-    color: #000000 !important;
-}
-
-.primary-btn { 
-    padding: 12px; 
-    background: #000000; 
-    color: #ffffff !important;
-    border: none; 
-    border-radius: 8px; 
-    font-weight: bold; 
-    cursor: pointer; 
-}
-
-.admin-scroll-area { overflow-y: auto; margin-top: 15px; display: flex; flex-direction: column; gap: 20px; }
-.admin-group { display: flex; flex-direction: column; gap: 10px; }
-.divider { border: 0; height: 1px; background: rgba(0, 0, 0, 0.1); }
-.admin-items-list { display: flex; flex-direction: column; gap: 10px; }
-.admin-item-row { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    background: #f9f9f9; 
-    padding: 10px; 
-    border-radius: 8px; 
-    border: 1px solid #ddd; 
-}
-.action-btn { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.75rem; font-weight: bold; color: #ffffff !important; }
-.btn-toggle { background: #2196F3; }
-.btn-delete { background: #f44336; }
