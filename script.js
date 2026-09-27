@@ -51,16 +51,34 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
 
-    // --- CYBERPUNK MOUSE CURSOR TRAIL FIX ---
+    // --- INITIALIZE VANTA FOG SILVER BACKGROUND ANIMATION ---
+    if (window.VANTA && window.VANTA.FOG) {
+        window.VANTA.FOG({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            highlightColor: 0x00f3ff,
+            midtoneColor: 0x121a2d,
+            lowlightColor: 0x05070e,
+            baseColor: 0x080b14,
+            blurFactor: 0.6,
+            speed: 1.2
+        });
+    }
+
+    // --- CYBERPUNK MOUSE CURSOR TRAIL FIX (SHOW ONLY ON MOUSE MOVE) ---
     const cursor = document.getElementById('cyber-cursor');
     if (cursor) {
         document.addEventListener('mousemove', (e) => {
-            cursor.style.opacity = '1';
+            cursor.style.display = 'block';
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
         document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
+            cursor.style.display = 'none';
         });
     }
 
@@ -181,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nftSearchInput) {
         nftSearchInput.addEventListener('input', (e) => {
             currentSearchQuery = e.target.value.toLowerCase().trim();
-            cachedNftHTML = ""; // Invalidate cache on search input change
+            cachedNftHTML = ""; // Reset cache on input change
             renderContent();
         });
     }
@@ -189,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nftSortSelect) {
         nftSortSelect.addEventListener('change', (e) => {
             currentSortOption = e.target.value;
-            cachedNftHTML = ""; // Invalidate cache on sort change
+            cachedNftHTML = "";
             renderContent();
         });
     }
@@ -200,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentFilterCategory = btn.getAttribute('data-filter');
-            cachedNftHTML = ""; // Invalidate cache on filter category change
+            cachedNftHTML = "";
             renderContent();
         });
     });
@@ -353,14 +371,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 liveNFTs.push({ id: doc.id, ...data });
             });
-            cachedNftHTML = ""; // Invalidate cache on fresh Firebase data
+            cachedNftHTML = "";
             renderContent();
         }, (error) => console.log("Error loading NFTs:", error));
 
         db.collection("collectors").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             liveCollectors = [];
             snapshot.forEach((doc) => liveCollectors.push({ id: doc.id, ...doc.data() }));
-            cachedCollectorHTML = ""; // Invalidate cache on fresh collectors data
+            cachedCollectorHTML = "";
             renderContent();
         }, (error) => console.log("Error loading Collectors:", error));
 
@@ -394,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (filteredNFTs.length === 0) {
-                cachedNftHTML = ""; // Reset cache so clearing search query instantly re-renders posts
+                cachedNftHTML = "";
                 nftGrid.innerHTML = `<p style="color:#888; grid-column: 1/-1; text-align:center; padding: 40px; font-size: 1rem;">No NFT creations matching your criteria.</p>`;
             } else {
                 const newNftHTML = filteredNFTs.map((item, idx) => {
