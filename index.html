@@ -51,15 +51,33 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
+        /* Fixed Search Input Text Color (Vibrant High-Contrast Cyan) */
         .search-box input {
             padding: 10px 15px;
             border-radius: 8px;
-            border: 1px solid #333;
-            background: #111;
-            color: #fff;
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            background: #121212 !important;
+            color: #00f3ff !important;
+            -webkit-text-fill-color: #00f3ff !important;
             width: 240px;
             font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.3s ease;
         }
+        .search-box input::placeholder {
+            color: #888888 !important;
+            -webkit-text-fill-color: #888888 !important;
+        }
+        .search-box input:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
+            background: #181818 !important;
+            color: #00f3ff !important;
+            -webkit-text-fill-color: #00f3ff !important;
+        }
+
         .filter-btns {
             display: flex;
             gap: 8px;
@@ -81,26 +99,32 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
         }
 
-        /* Modern Select & Dropdown Styling Fix for Clear Text Visibility */
+        /* High-Contrast Sort Select Dropdown */
         .sort-select {
-            padding: 10px 14px;
+            padding: 10px 36px 10px 14px;
             border-radius: 8px;
-            border: 1px solid rgba(0, 243, 255, 0.4);
-            background: #141414;
-            color: #00f3ff;
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            background-color: #121212 !important;
+            color: #ffffff !important;
             font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             outline: none;
             transition: all 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%2300f3ff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
         }
         .sort-select:hover, .sort-select:focus {
             border-color: #00f3ff;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
         }
         .sort-select option {
-            background-color: #1a1a1a;
-            color: #ffffff;
+            background-color: #1a1a1a !important;
+            color: #ffffff !important;
             padding: 10px;
         }
 
@@ -132,7 +156,7 @@
             perspective: 1000px;
         }
 
-        /* Cyberpunk Glowing Mouse Trail */
+        /* Cyberpunk Mouse Trail Fix */
         #cyber-cursor {
             position: fixed;
             width: 12px;
@@ -142,7 +166,8 @@
             pointer-events: none;
             z-index: 99999;
             box-shadow: 0 0 12px #00f3ff, 0 0 20px #00f3ff;
-            transition: transform 0.05s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.05s ease;
             transform: translate(-50%, -50%);
         }
 
