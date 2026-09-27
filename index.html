@@ -80,13 +80,49 @@
             font-weight: bold;
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
         }
+
+        /* Modern Select & Dropdown Styling Fix for Clear Text Visibility */
         .sort-select {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #333;
-            background: #111;
-            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            background: #141414;
+            color: #00f3ff;
             font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .sort-select:hover, .sort-select:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+        .sort-select option {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 10px;
+        }
+
+        /* Modern Web3 Header Action Buttons */
+        .header-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+        .header-icon-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            border-color: #00f3ff;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
+            transform: translateY(-1px);
         }
 
         /* 3D Tilt Effect on NFT Card */
@@ -129,16 +165,6 @@
         .zoom-btn:hover {
             background: #00f3ff;
             color: #000;
-        }
-
-        /* Sound Toggle Button */
-        .sound-btn {
-            background: transparent;
-            border: none;
-            color: #00f3ff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-right: 5px;
         }
 
         /* User Profile Modal Liked Items */
@@ -189,8 +215,13 @@
                 Live: <span id="dynamicLiveUsers">14</span> | Followers: <span id="dynamicFollowers">150.4k</span>
             </span>
 
-            <!-- Web3 Sci-Fi Sound Toggle Button -->
-            <button id="soundToggleBtn" class="sound-btn" title="Toggle UI Sound Effects">🔊</button>
+            <!-- Modern Web3 Sound Toggle Button -->
+            <button id="soundToggleBtn" class="header-icon-btn" title="Toggle UI Sound Effects">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+            </button>
             
             <!-- User Profile / Sign in -->
             <div id="userInfo" class="user-info hidden">
@@ -203,7 +234,13 @@
                 <span>Sign in / Register</span>
             </button>
 
-            <button id="adminLockBtn" class="lock-btn">🔒</button>
+            <!-- Modern Web3 Admin Lock Button -->
+            <button id="adminLockBtn" class="header-icon-btn" title="Admin Dashboard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </button>
         </div>
     </header>
 
