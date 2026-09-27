@@ -515,20 +515,6 @@ body {
     margin-bottom: 8px;
 }
 
-/* Live Floor Price Ticker Banner */
-.nft-floor-price {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0, 243, 255, 0.05);
-    border: 1px dashed rgba(0, 243, 255, 0.3);
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    color: #00f3ff;
-    margin-bottom: 10px;
-}
-
 .nft-desc-wrapper {
     font-size: 0.85rem;
     color: #bbb;
