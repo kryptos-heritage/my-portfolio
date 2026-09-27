@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MOUSE HOVER STAR DUST PARTICLES ---
     document.addEventListener('mousemove', (e) => {
-        if (Math.random() < 0.2) { // Throttle particles for smooth performance
+        if (Math.random() < 0.2) {
             const particle = document.createElement('div');
             particle.className = 'star-particle';
             particle.style.left = e.clientX + 'px';
@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bgAudio) {
         bgAudio.volume = 0.3; // 30% Ambient Volume
         
-        // Start playing on first user interaction anywhere on page
         const startMusicOnInteraction = () => {
             if (!soundMuted && bgAudio.paused) {
                 bgAudio.play().then(() => {
@@ -122,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SOUND TOGGLE BUTTON (CONTROLS BOTH MP3 BGM & VISUALIZER) ---
+    // --- SOUND TOGGLE BUTTON ---
     const soundToggleBtn = document.getElementById('soundToggleBtn');
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', () => {
@@ -148,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentEthUsdPrice = data.ethereum.usd;
                     const ethDisplay = document.getElementById('ethPriceDisplay');
                     if (ethDisplay) ethDisplay.innerText = `$${currentEthUsdPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-                    renderContent(); // Re-render to update collector USD estimates
+                    renderContent();
                 }
             })
             .catch(() => {});
@@ -255,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // OPEN LOGIN MODAL
     if (googleSignInBtn) {
         googleSignInBtn.addEventListener('click', () => {
             playSciFiSound(500, 0.08);
@@ -269,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // AUTH STATE LISTENER
     auth.onAuthStateChanged((user) => {
         if (user) {
             const userDisplayName = user.displayName || user.email.split('@')[0];
@@ -298,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderContent();
     });
 
-    // LOGGED IN USER PROFILE MODAL
     const userProfileModal = document.getElementById('userProfileModal');
     const closeUserProfileModal = document.getElementById('closeUserProfileModal');
 
@@ -313,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const avatarSrc = currentUser.photoURL || generateInitialAvatar(initialChar);
             document.getElementById('modalUserAvatarContainer').innerHTML = `<img src="${avatarSrc}" class="neon-avatar" style="width:60px; height:60px;">`;
 
-            // Populate Liked NFTs
             const likedNftsList = document.getElementById('modalLikedNftsList');
             const userLikedItems = liveNFTs.filter(item => (item.likedBy || []).includes(currentUser.uid));
             
@@ -333,7 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // SIGN IN / SIGN UP / FORGOT PASSWORD
     if (emailSignInBtn) {
         emailSignInBtn.addEventListener('click', () => {
             const email = authEmail.value.trim();
@@ -401,6 +395,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.baseLikes = generateUniqueRandomLikes();
                     db.collection("nfts").doc(doc.id).update({ baseLikes: data.baseLikes });
                 }
+                
+                // AUTOMATICALLY SET EXISTING NFTS TO "Sold Out"
+                if (data.status !== "Sold Out") {
+                    db.collection("nfts").doc(doc.id).update({ status: "Sold Out" });
+                    data.status = "Sold Out";
+                }
+
                 liveNFTs.push({ id: doc.id, ...data });
             });
             cachedNftHTML = "";
@@ -410,6 +411,23 @@ document.addEventListener('DOMContentLoaded', () => {
         db.collection("collectors").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             liveCollectors = [];
             snapshot.forEach((doc) => liveCollectors.push({ id: doc.id, ...doc.data() }));
+            
+            // IF NO COLLECTORS EXIST YET, AUTO-POPULATE THE 2 DEFAULT COLLECTORS WITH TINY PRICES
+            if (liveCollectors.length === 0 && liveNFTs.length >= 2) {
+                db.collection("collectors").add({
+                    name: "Alex Vance",
+                    eth: "0.015 ETH",
+                    itemBought: liveNFTs[0].title,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                db.collection("collectors").add({
+                    name: "Elena Rostova",
+                    eth: "0.02 ETH",
+                    itemBought: liveNFTs[1].title,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+
             cachedCollectorHTML = "";
             renderContent();
         }, (error) => console.log("Error loading Collectors:", error));
@@ -429,14 +447,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const collectorList = document.getElementById('collectorList');
 
         if (nftGrid) {
-            // Apply Search & Filter
             let filteredNFTs = liveNFTs.filter(item => {
                 const matchesSearch = item.title.toLowerCase().includes(currentSearchQuery) || (item.story && item.story.toLowerCase().includes(currentSearchQuery));
                 const matchesCategory = currentFilterCategory === "all" || item.status === currentFilterCategory;
                 return matchesSearch && matchesCategory;
             });
 
-            // Apply Sorting
             if (currentSortOption === "popular") {
                 filteredNFTs.sort((a, b) => ((b.baseLikes || 0) + (b.likedBy || []).length) - ((a.baseLikes || 0) + (a.likedBy || []).length));
             } else if (currentSortOption === "title") {
@@ -455,10 +471,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const base = item.baseLikes || 125000;
                     const totalLikes = base + (likedByArray.length);
 
-                    // Dynamic Floor Price estimation based on likes
-                    const ethFloor = (1.2 + (totalLikes % 50) * 0.08).toFixed(2);
-                    const usdFloor = Math.round(ethFloor * currentEthUsdPrice).toLocaleString();
-
                     return `
                         <div class="nft-card glassmorphism" onmousemove="handleCardTilt(event, this)" onmouseleave="resetCardTilt(this)">
                             <div class="nft-img-wrapper" onclick="openPreview('${item.img}', '${item.title}')">
@@ -466,16 +478,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="card-watermark">KH ©</span>
                             </div>
                             <h3>${item.title}</h3>
-                            <div class="nft-floor-price">
-                                <span>💎 Floor Price:</span>
-                                <span><strong>${ethFloor} ETH</strong> (~$${usdFloor})</span>
-                            </div>
                             <div class="nft-desc-wrapper">
                                 <span id="desc-${idx}">${truncatedText}</span>
                                 ${isLongStory ? `<button class="read-more-btn" id="btn-${idx}" onclick="toggleReadMore(${idx}, '${encodeURIComponent(item.story)}')">More</button>` : ''}
                             </div>
                             <div class="card-footer-action">
-                                <span class="badge ${item.status === 'Available' ? 'badge-available' : 'badge-sold'}">${item.status}</span>
+                                <span class="badge badge-sold">Sold Out</span>
                                 <div style="display:flex; gap: 6px; align-items:center;">
                                     <button class="outline-like-btn ${isLiked ? 'liked' : ''}" onclick="handleLike('${item.id}')">
                                         <svg class="heart-icon" viewBox="0 0 24 24">
@@ -502,17 +510,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 collectorList.innerHTML = `<p style="color:#888; padding: 10px;">No collectors listed yet.</p>`;
             } else {
                 const newCollectorHTML = liveCollectors.map((item, idx) => {
-                    const ethVal = parseFloat(item.eth) || 0;
-                    const usdVal = ethVal > 0 ? (ethVal * currentEthUsdPrice).toLocaleString('en-US', { maximumFractionDigits: 0 }) : null;
+                    const ethVal = parseFloat(item.eth) || 0.02;
+                    const usdVal = ethVal > 0 ? (ethVal * currentEthUsdPrice).toLocaleString('en-US', { maximumFractionDigits: 2 }) : null;
                     const usdText = usdVal ? ` ≈ $${usdVal} USD` : '';
 
-                    // Assign VIP Badges based on ETH value or position
                     let vipClass = 'vip-gold';
                     let vipLabel = 'Gold VIP';
-                    if (ethVal >= 3.0 || idx === 0) {
+                    if (idx === 0) {
                         vipClass = 'vip-diamond';
                         vipLabel = 'Diamond VIP';
-                    } else if (ethVal >= 2.0 || idx === 1) {
+                    } else if (idx === 1) {
                         vipClass = 'vip-platinum';
                         vipLabel = 'Platinum VIP';
                     }
@@ -539,7 +546,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAdminLists(liveNFTs, liveCollectors);
     }
 
-    // 3D CARD TILT EFFECT
     window.handleCardTilt = function(e, card) {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
@@ -551,7 +557,6 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
     };
 
-    // CLEAN SOCIAL SHARE
     window.shareNft = function(title) {
         playSciFiSound(750, 0.08);
         const cleanUrl = window.location.origin + window.location.pathname;
@@ -561,7 +566,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // INTERACTIVE ZOOM IN PREVIEW MODAL
     let zoomLevel = 1;
     const previewModalImg = document.getElementById('previewModalImg');
 
