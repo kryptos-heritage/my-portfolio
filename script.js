@@ -684,7 +684,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.toggleNftStatus = function(docId, currentStatus) {
-        db.collection("nfts").doc(docId).update({ status: currentStatus === 'Available' ? 'Sold Out' : 'Available' });
+        const newStatus = (currentStatus === 'Available') ? 'Sold Out' : 'Available';
+        db.collection("nfts").doc(docId).update({ status: newStatus })
+            .then(() => {
+                playSciFiSound(700, 0.08);
+            })
+            .catch((error) => {
+                alert('Error updating status: ' + error.message);
+            });
     };
 
     window.deleteNft = function(docId) {
