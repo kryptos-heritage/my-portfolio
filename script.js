@@ -47,19 +47,44 @@ function generateInitialAvatar(char) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- REMOVE PRELOADER AFTER PAGE LOAD ---
+    setTimeout(() => {
+        const preloader = document.getElementById('pagePreloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            setTimeout(() => preloader.style.display = 'none', 500);
+        }
+    }, 800);
+
     // PREVENT RIGHT CLICK AND IMAGE DRAGGING GLOBALLY
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
 
+    // --- MOUSE HOVER STAR DUST PARTICLES ---
+    document.addEventListener('mousemove', (e) => {
+        if (Math.random() < 0.2) { // Throttle particles for smooth performance
+            const particle = document.createElement('div');
+            particle.className = 'star-particle';
+            particle.style.left = e.clientX + 'px';
+            particle.style.top = e.clientY + 'px';
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 800);
+        }
+    });
+
     // --- INITIALIZE BACKGROUND MUSIC (CYBER-BGM.MP3 AT 30% VOLUME) ---
     const bgAudio = document.getElementById('bgAudio');
+    const audioVisualizer = document.getElementById('audioVisualizer');
+
     if (bgAudio) {
         bgAudio.volume = 0.3; // 30% Ambient Volume
         
-        // Start playing on first user click anywhere on page (Browser Autoplay Requirement)
+        // Start playing on first user interaction anywhere on page
         const startMusicOnInteraction = () => {
             if (!soundMuted && bgAudio.paused) {
-                bgAudio.play().catch(e => console.log("Audio play deferred:", e));
+                bgAudio.play().then(() => {
+                    if (audioVisualizer) audioVisualizer.classList.remove('paused');
+                }).catch(e => console.log("Audio deferred:", e));
             }
             document.removeEventListener('click', startMusicOnInteraction);
         };
@@ -97,28 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SOUND TOGGLE BUTTON (CONTROLS BOTH MP3 BGM & UI SOUNDS) ---
+    // --- SOUND TOGGLE BUTTON (CONTROLS BOTH MP3 BGM & VISUALIZER) ---
     const soundToggleBtn = document.getElementById('soundToggleBtn');
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', () => {
             soundMuted = !soundMuted;
             if (soundMuted) {
                 if (bgAudio) bgAudio.pause();
-                soundToggleBtn.innerHTML = `
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff3366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                        <line x1="23" y1="9" x2="17" y2="15"></line>
-                        <line x1="17" y1="9" x2="23" y2="15"></line>
-                    </svg>
-                `;
+                if (audioVisualizer) audioVisualizer.classList.add('paused');
             } else {
                 if (bgAudio) bgAudio.play().catch(e => console.log(e));
-                soundToggleBtn.innerHTML = `
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                    </svg>
-                `;
+                if (audioVisualizer) audioVisualizer.classList.remove('paused');
                 playSciFiSound(600, 0.08);
             }
         });
@@ -134,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentEthUsdPrice = data.ethereum.usd;
                     const ethDisplay = document.getElementById('ethPriceDisplay');
                     if (ethDisplay) ethDisplay.innerText = `$${currentEthUsdPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+                    renderContent(); // Re-render to update collector USD estimates
                 }
             })
             .catch(() => {});
@@ -440,6 +455,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const base = item.baseLikes || 125000;
                     const totalLikes = base + (likedByArray.length);
 
+                    // Dynamic Floor Price estimation based on likes
+                    const ethFloor = (1.2 + (totalLikes % 50) * 0.08).toFixed(2);
+                    const usdFloor = Math.round(ethFloor * currentEthUsdPrice).toLocaleString();
+
                     return `
                         <div class="nft-card glassmorphism" onmousemove="handleCardTilt(event, this)" onmouseleave="resetCardTilt(this)">
                             <div class="nft-img-wrapper" onclick="openPreview('${item.img}', '${item.title}')">
@@ -447,6 +466,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="card-watermark">KH ©</span>
                             </div>
                             <h3>${item.title}</h3>
+                            <div class="nft-floor-price">
+                                <span>💎 Floor Price:</span>
+                                <span><strong>${ethFloor} ETH</strong> (~$${usdFloor})</span>
+                            </div>
                             <div class="nft-desc-wrapper">
                                 <span id="desc-${idx}">${truncatedText}</span>
                                 ${isLongStory ? `<button class="read-more-btn" id="btn-${idx}" onclick="toggleReadMore(${idx}, '${encodeURIComponent(item.story)}')">More</button>` : ''}
@@ -478,16 +501,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (liveCollectors.length === 0) {
                 collectorList.innerHTML = `<p style="color:#888; padding: 10px;">No collectors listed yet.</p>`;
             } else {
-                const newCollectorHTML = liveCollectors.map(item => {
+                const newCollectorHTML = liveCollectors.map((item, idx) => {
                     const ethVal = parseFloat(item.eth) || 0;
                     const usdVal = ethVal > 0 ? (ethVal * currentEthUsdPrice).toLocaleString('en-US', { maximumFractionDigits: 0 }) : null;
                     const usdText = usdVal ? ` ≈ $${usdVal} USD` : '';
 
+                    // Assign VIP Badges based on ETH value or position
+                    let vipClass = 'vip-gold';
+                    let vipLabel = 'Gold VIP';
+                    if (ethVal >= 3.0 || idx === 0) {
+                        vipClass = 'vip-diamond';
+                        vipLabel = 'Diamond VIP';
+                    } else if (ethVal >= 2.0 || idx === 1) {
+                        vipClass = 'vip-platinum';
+                        vipLabel = 'Platinum VIP';
+                    }
+
                     return `
-                        <div class="collector-card glassmorphism">
-                            <span>💎</span>
-                            <span><strong>${item.name}</strong> bought <em>${item.itemBought || 'NFT'}</em></span>
-                            <span style="color:#00ff66;" title="${usdText}">(${item.eth}${usdText ? ' • ' + usdText : ''})</span>
+                        <div class="collector-card glassmorphism ${vipClass}">
+                            <span>👑</span>
+                            <div>
+                                <span><strong>${item.name}</strong> bought <em>${item.itemBought || 'NFT'}</em></span><br>
+                                <span style="color:#00ff66; font-size: 0.8rem;" title="${usdText}">${item.eth}${usdText ? ' • ' + usdText : ''}</span>
+                            </div>
+                            <span class="vip-badge">${vipLabel}</span>
                         </div>
                     `;
                 }).join('');
