@@ -24,7 +24,7 @@
         <div class="header-right">
             <!-- Animated White Glowing Eye Icon for Live Status (Dynamic) -->
             <span class="live-status">
-                <svg class="glowing-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="glowing-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
@@ -33,14 +33,14 @@
             
             <!-- User Profile / Google Sign in -->
             <div id="userInfo" class="user-info hidden">
-                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar" width="32" height="32">
                 <span id="userName" class="user-name"></span>
                 <button id="signOutBtn" class="action-btn btn-delete">Sign Out</button>
             </div>
 
             <button id="googleSignInBtn" class="google-btn">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
-                Sign in with Google
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" width="18" height="18">
+                <span>Sign in with Google</span>
             </button>
 
             <button id="adminLockBtn" class="lock-btn">🔒</button>
@@ -53,7 +53,7 @@
         <!-- Profile Section -->
         <section class="profile-section glassmorphism">
             <div class="profile-avatar">
-                <img id="profileImage" src="profile 1.jpg" alt="Profile Picture">
+                <img id="profileImage" src="profile 1.jpg" alt="Profile Picture" width="130" height="130">
             </div>
             <h1 class="profile-name glow-text">Prashan Liyanage</h1>
             <p class="profile-bio">Digital Artist & 3D Web3 Creator | Founder of Kryptos Heritage</p>
@@ -94,7 +94,7 @@
             <span id="closePreview" class="close-btn">&times;</span>
             <div class="watermarked-image-container">
                 <img id="previewModalImg" src="" alt="NFT Preview">
-                <div class="watermark-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 1.5rem; font-weight: 900; color: rgba(255, 255, 255, 0.4); letter-spacing: 4px; white-space: nowrap; pointer-events: none; text-shadow: 0 0 10px rgba(0,0,0,0.9); z-index: 10;">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
+                <div class="watermark-overlay">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
             </div>
             <h3 id="previewModalTitle" class="glow-text" style="margin-top: 15px;"></h3>
         </div>
@@ -105,10 +105,10 @@
         <div class="admin-content glassmorphism login-modal-content">
             <span id="closeLoginModal" class="close-btn">&times;</span>
             <h3 class="glow-text">Sign In Required</h3>
-            <p style="margin: 15px 0; color: #ccc;">Please sign in with your Google account to like and interact with NFT creations.</p>
+            <p style="margin: 15px 0; color: #333;">Please sign in with your Google account to like and interact with NFT creations.</p>
             <button id="modalGoogleBtn" class="google-btn" style="margin: 0 auto;">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
-                Sign in with Google
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google" width="18" height="18">
+                <span>Sign in with Google</span>
             </button>
         </div>
     </div>
