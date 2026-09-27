@@ -6,6 +6,32 @@
     <title>Kryptos Heritage | Premium NFT Portfolio</title>
     <link rel="stylesheet" href="style.css">
     
+    <!-- Neon Pulsing Light Animation for Logged-In User Profile Avatar -->
+    <style>
+        @keyframes neonPulse {
+            0% {
+                box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 15px #00f3ff;
+                border-color: #00f3ff;
+            }
+            50% {
+                box-shadow: 0 0 2px #0066ff, 0 0 5px #0066ff, 0 0 8px #0066ff;
+                border-color: #0066ff;
+            }
+            100% {
+                box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 15px #00f3ff;
+                border-color: #00f3ff;
+            }
+        }
+        .neon-avatar {
+            border-radius: 50% !important;
+            border: 2px solid #00f3ff !important;
+            animation: neonPulse 1.5s infinite alternate ease-in-out !important;
+            object-fit: cover !important;
+            width: 34px !important;
+            height: 34px !important;
+        }
+    </style>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -33,7 +59,7 @@
             
             <!-- User Profile / Sign in -->
             <div id="userInfo" class="user-info hidden">
-                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar" width="32" height="32">
+                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar neon-avatar" width="34" height="34">
                 <span id="userName" class="user-name"></span>
                 <button id="signOutBtn" class="action-btn btn-delete">Sign Out</button>
             </div>
