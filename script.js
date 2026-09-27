@@ -79,16 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
     const closeLoginModal = document.getElementById('closeLoginModal');
 
-    // Handle Redirect Result for Auth Error Detection
-    auth.getRedirectResult().catch((error) => {
-        if (error && error.code) {
-            console.error("Google Auth Redirect Error:", error.code, error.message);
-            if (error.code === 'auth/unauthorized-domain') {
-                alert('Domain Authorized වී නොමැත. කරුණාකර Firebase Console -> Authentication -> Settings -> Authorized Domains වෙත ගොස් ඔබගේ Domain එක එකතු කරන්න.');
-            }
-        }
-    });
-
+    // AUTH STATE LISTENER
     auth.onAuthStateChanged((user) => {
         if (user) {
             currentUser = { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL };
@@ -108,10 +99,25 @@ document.addEventListener('DOMContentLoaded', () => {
         renderContent();
     });
 
+    // FIXED GOOGLE SIGN IN USING POPUP
     function handleGoogleLogin() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        auth.signInWithRedirect(provider);
+
+        auth.signInWithPopup(provider)
+            .then((result) => {
+                console.log("Successfully logged in:", result.user);
+            })
+            .catch((error) => {
+                console.error("Google Login Error:", error);
+                if (error.code === 'auth/unauthorized-domain') {
+                    alert('Firebase Console එකේ Authorized Domains වලට kryptos-heritage.github.io එකතු කර නොමැත!');
+                } else if (error.code === 'auth/popup-blocked') {
+                    alert('ඔබගේ බ්‍රවුසරය මගින් Login Popup එක Block කර ඇත. කරුණාකර Popup Allow කරන්න.');
+                } else if (error.code !== 'auth/popup-closed-by-user') {
+                    alert('Login Error: ' + error.message);
+                }
+            });
     }
 
     if (googleSignInBtn) googleSignInBtn.addEventListener('click', handleGoogleLogin);
@@ -136,13 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 liveNFTs.push({ id: doc.id, ...data });
             });
             renderContent();
-        }, (error) => console.log("Error loading NFTs"));
+        }, (error) => console.log("Error loading NFTs:", error));
 
         db.collection("collectors").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
             liveCollectors = [];
             snapshot.forEach((doc) => liveCollectors.push({ id: doc.id, ...doc.data() }));
             renderContent();
-        }, (error) => console.log("Error loading Collectors"));
+        }, (error) => console.log("Error loading Collectors:", error));
 
         db.collection("settings").doc("profile").onSnapshot((doc) => {
             if (doc.exists && doc.data().photoUrl) {
