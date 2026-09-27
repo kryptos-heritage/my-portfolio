@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUser = null;
 
     const googleSignInBtn = document.getElementById('googleSignInBtn');
-    const modalGoogleBtn = document.getElementById('modalGoogleBtn');
     const signOutBtn = document.getElementById('signOutBtn');
     const userInfo = document.getElementById('userInfo');
     const userAvatar = document.getElementById('userAvatar');
@@ -79,51 +78,114 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
     const closeLoginModal = document.getElementById('closeLoginModal');
 
+    // EMAIL AUTH ELEMENTS
+    const authEmail = document.getElementById('authEmail');
+    const authPassword = document.getElementById('authPassword');
+    const emailSignInBtn = document.getElementById('emailSignInBtn');
+    const emailSignUpBtn = document.getElementById('emailSignUpBtn');
+    const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+
+    // OPEN LOGIN MODAL ON HEADER BUTTON CLICK
+    if (googleSignInBtn) {
+        googleSignInBtn.addEventListener('click', () => {
+            if (loginModal) loginModal.classList.remove('hidden');
+        });
+    }
+
+    if (closeLoginModal) {
+        closeLoginModal.addEventListener('click', () => {
+            if (loginModal) loginModal.classList.add('hidden');
+        });
+    }
+
     // AUTH STATE LISTENER
     auth.onAuthStateChanged((user) => {
         if (user) {
-            currentUser = { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL };
-            userInfo.classList.remove('hidden');
-            googleSignInBtn.classList.add('hidden');
-            userAvatar.src = currentUser.photoURL || 'profile 1.jpg';
-            userName.innerText = currentUser.displayName || 'Collector';
+            const userDisplayName = user.displayName || user.email.split('@')[0];
+            currentUser = { uid: user.uid, displayName: userDisplayName, email: user.email, photoURL: user.photoURL };
+            if (userInfo) userInfo.classList.remove('hidden');
+            if (googleSignInBtn) googleSignInBtn.classList.add('hidden');
+            if (userAvatar) userAvatar.src = currentUser.photoURL || 'profile 1.jpg';
+            if (userName) userName.innerText = currentUser.displayName;
             if (loginModal) loginModal.classList.add('hidden');
             boostFollowersOnLogin();
         } else {
             currentUser = null;
-            userInfo.classList.add('hidden');
-            googleSignInBtn.classList.remove('hidden');
+            if (userInfo) userInfo.classList.add('hidden');
+            if (googleSignInBtn) googleSignInBtn.classList.remove('hidden');
             localStorage.removeItem('kh_user_counted');
             updateFollowersDisplay();
         }
         renderContent();
     });
 
-    // FIXED GOOGLE SIGN IN USING POPUP
-    function handleGoogleLogin() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
+    // 1. SIGN IN WITH EMAIL & PASSWORD
+    if (emailSignInBtn) {
+        emailSignInBtn.addEventListener('click', () => {
+            const email = authEmail.value.trim();
+            const password = authPassword.value.trim();
 
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                console.log("Successfully logged in:", result.user);
-            })
-            .catch((error) => {
-                console.error("Google Login Error:", error);
-                if (error.code === 'auth/unauthorized-domain') {
-                    alert('Firebase Console එකේ Authorized Domains වලට kryptos-heritage.github.io එකතු කර නොමැත!');
-                } else if (error.code === 'auth/popup-blocked') {
-                    alert('ඔබගේ බ්‍රවුසරය මගින් Login Popup එක Block කර ඇත. කරුණාකර Popup Allow කරන්න.');
-                } else if (error.code !== 'auth/popup-closed-by-user') {
+            if (!email || !password) {
+                alert('කරුණාකර Email සහ Password ඇතුළත් කරන්න.');
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert('සාර්ථකව ඇතුළු විය!');
+                    if (loginModal) loginModal.classList.add('hidden');
+                })
+                .catch((error) => {
                     alert('Login Error: ' + error.message);
-                }
-            });
+                });
+        });
     }
 
-    if (googleSignInBtn) googleSignInBtn.addEventListener('click', handleGoogleLogin);
-    if (modalGoogleBtn) modalGoogleBtn.addEventListener('click', handleGoogleLogin);
-    if (signOutBtn) signOutBtn.addEventListener('click', () => auth.signOut());
-    if (closeLoginModal) closeLoginModal.addEventListener('click', () => loginModal.classList.add('hidden'));
+    // 2. CREATE NEW ACCOUNT (SIGN UP)
+    if (emailSignUpBtn) {
+        emailSignUpBtn.addEventListener('click', () => {
+            const email = authEmail.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!email || !password) {
+                alert('කරුණාකර Email සහ Password ඇතුළත් කරන්න.');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert('ගිණුම සාර්ථකව සාදන ලදී!');
+                    if (loginModal) loginModal.classList.add('hidden');
+                })
+                .catch((error) => {
+                    alert('Registration Error: ' + error.message);
+                });
+        });
+    }
+
+    // 3. FORGOT PASSWORD (RESET LINK TO EMAIL)
+    if (forgotPasswordBtn) {
+        forgotPasswordBtn.addEventListener('click', () => {
+            const email = authEmail.value.trim();
+
+            if (!email) {
+                alert('කරුණාකර Email ලිපිනය ඇතුළත් කර "Forgot Password?" ඔබන්න.');
+                return;
+            }
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('Password Reset කිරීමට අදාළ Link එක ඔබගේ Email එකට යවන ලදී. කරුණාකර Inbox/Spam පරීක්ෂා කරන්න.');
+                })
+                .catch((error) => {
+                    alert('Error: ' + error.message);
+                });
+        });
+    }
+
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => auth.signOut());
+    }
 
     let liveNFTs = [];
     let liveCollectors = [];
@@ -231,15 +293,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.openPreview = function(imgSrc, title) {
         const modal = document.getElementById('imagePreviewModal');
-        document.getElementById('previewModalImg').src = imgSrc;
-        document.getElementById('previewModalTitle').innerText = title;
-        modal.classList.remove('hidden');
+        if (modal) {
+            document.getElementById('previewModalImg').src = imgSrc;
+            document.getElementById('previewModalTitle').innerText = title;
+            modal.classList.remove('hidden');
+        }
     };
 
     const closePreviewBtn = document.getElementById('closePreview');
     if (closePreviewBtn) {
         closePreviewBtn.addEventListener('click', () => {
-            document.getElementById('imagePreviewModal').classList.add('hidden');
+            const previewModal = document.getElementById('imagePreviewModal');
+            if (previewModal) previewModal.classList.add('hidden');
         });
     }
 
@@ -339,7 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (closeAdmin) closeAdmin.addEventListener('click', () => adminPanel.classList.add('hidden'));
+    if (closeAdmin && adminPanel) {
+        closeAdmin.addEventListener('click', () => adminPanel.classList.add('hidden'));
+    }
 
     const saveProfileBtn = document.getElementById('saveProfileBtn');
     if (saveProfileBtn) {
