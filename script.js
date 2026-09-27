@@ -1,9 +1,9 @@
-// --- EXACT FIREBASE CONFIGURATION FROM YOUR PROJECT ---
+// --- EXACT FIREBASE CONFIGURATION FROM YOUR CONSOLE ---
 const firebaseConfig = {
     apiKey: "AIzaSyCL7SfK5FFBYFAQ3STXf-NbtWv5qwui4L0",
     authDomain: "kryptos-heritage.firebaseapp.com",
     projectId: "kryptos-heritage",
-    storageBucket: "kryptos-heritage.appspot.com",
+    storageBucket: "kryptos-heritage.firebasestorage.app",
     messagingSenderId: "472268166863",
     appId: "1:472268166863:web:bb2f91319dcc0448d189ba"
 };
