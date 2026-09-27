@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateLiveUsers();
     updateFollowersDisplay();
-    setInterval(updateLiveUsers, 15000); // Optimized interval for better performance
+    setInterval(updateLiveUsers, 15000);
 
     function generateUniqueRandomLikes() {
         return Math.floor(Math.random() * (199999 - 100000 + 1)) + 100000;
@@ -79,6 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
     const closeLoginModal = document.getElementById('closeLoginModal');
 
+    // Handle Redirect Result for Auth Error Detection
+    auth.getRedirectResult().catch((error) => {
+        if (error && error.code) {
+            console.error("Google Auth Redirect Error:", error.code, error.message);
+            if (error.code === 'auth/unauthorized-domain') {
+                alert('Domain Authorized වී නොමැත. කරුණාකර Firebase Console -> Authentication -> Settings -> Authorized Domains වෙත ගොස් ඔබගේ Domain එක එකතු කරන්න.');
+            }
+        }
+    });
+
     auth.onAuthStateChanged((user) => {
         if (user) {
             currentUser = { uid: user.uid, displayName: user.displayName, email: user.email, photoURL: user.photoURL };
@@ -100,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleGoogleLogin() {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider).catch((error) => console.error(error));
+        provider.setCustomParameters({ prompt: 'select_account' });
+        auth.signInWithRedirect(provider);
     }
 
     if (googleSignInBtn) googleSignInBtn.addEventListener('click', handleGoogleLogin);
@@ -183,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }).join('');
 
-                // DOM rendering optimization to prevent unnecessary redraw lag
                 if (newNftHTML !== cachedNftHTML) {
                     cachedNftHTML = newNftHTML;
                     nftGrid.innerHTML = newNftHTML;
@@ -197,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 const newCollectorHTML = liveCollectors.map(item => `
                     <div class="collector-card glassmorphism">
-                        <span>👑</span>
+                        <span>💎</span>
                         <span><strong>${item.name}</strong> bought <em>${item.itemBought || 'NFT'}</em></span>
                         <span style="color:#00ff66;">(${item.eth})</span>
                     </div>
