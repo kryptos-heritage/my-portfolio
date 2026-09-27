@@ -51,6 +51,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
 
+    // --- INITIALIZE BACKGROUND MUSIC (CYBER-BGM.MP3 AT 30% VOLUME) ---
+    const bgAudio = document.getElementById('bgAudio');
+    if (bgAudio) {
+        bgAudio.volume = 0.3; // 30% Ambient Volume
+        
+        // Start playing on first user click anywhere on page (Browser Autoplay Requirement)
+        const startMusicOnInteraction = () => {
+            if (!soundMuted && bgAudio.paused) {
+                bgAudio.play().catch(e => console.log("Audio play deferred:", e));
+            }
+            document.removeEventListener('click', startMusicOnInteraction);
+        };
+        document.addEventListener('click', startMusicOnInteraction);
+    }
+
     // --- INITIALIZE VANTA FOG SILVER BACKGROUND ANIMATION ---
     if (window.VANTA && window.VANTA.FOG) {
         window.VANTA.FOG({
@@ -69,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- CYBERPUNK MOUSE CURSOR TRAIL FIX (SHOW ONLY ON MOUSE MOVE) ---
+    // --- CYBERPUNK MOUSE CURSOR TRAIL FIX ---
     const cursor = document.getElementById('cyber-cursor');
     if (cursor) {
         document.addEventListener('mousemove', (e) => {
@@ -82,12 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SOUND TOGGLE WITH SVG ICON DYNAMIC SWITCHING ---
+    // --- SOUND TOGGLE BUTTON (CONTROLS BOTH MP3 BGM & UI SOUNDS) ---
     const soundToggleBtn = document.getElementById('soundToggleBtn');
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', () => {
             soundMuted = !soundMuted;
             if (soundMuted) {
+                if (bgAudio) bgAudio.pause();
                 soundToggleBtn.innerHTML = `
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff3366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -96,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </svg>
                 `;
             } else {
+                if (bgAudio) bgAudio.play().catch(e => console.log(e));
                 soundToggleBtn.innerHTML = `
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -199,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nftSearchInput) {
         nftSearchInput.addEventListener('input', (e) => {
             currentSearchQuery = e.target.value.toLowerCase().trim();
-            cachedNftHTML = ""; // Reset cache on input change
+            cachedNftHTML = "";
             renderContent();
         });
     }
@@ -497,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
     };
 
-    // CLEAN SOCIAL SHARE (PREVENTS 404 ERRORS)
+    // CLEAN SOCIAL SHARE
     window.shareNft = function(title) {
         playSciFiSound(750, 0.08);
         const cleanUrl = window.location.origin + window.location.pathname;
