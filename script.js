@@ -1,6 +1,6 @@
-// --- EXACT FIREBASE CONFIGURATION FROM YOUR CONSOLE ---
+// --- EXACT FIREBASE CONFIGURATION WITH NEW API KEY ---
 const firebaseConfig = {
-    apiKey: "AIzaSyCL7SfK5FFBYFAQ3STXf-NbtWv5qwui4L0",
+    apiKey: "AIzaSyDo_2erVoeb5Xz_dOfTUQ21C_cmOdq0cbw",
     authDomain: "kryptos-heritage.firebaseapp.com",
     projectId: "kryptos-heritage",
     storageBucket: "kryptos-heritage.firebasestorage.app",
