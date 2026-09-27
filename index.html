@@ -6,204 +6,9 @@
     <title>Kryptos Heritage | Premium NFT Portfolio</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- Premium Web3 Styling & Interactive Animations -->
-    <style>
-        /* Neon Avatar Animation */
-        @keyframes neonPulse {
-            0% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; border-color: #00f3ff; }
-            50% { box-shadow: 0 0 2px #0066ff, 0 0 5px #0066ff; border-color: #0066ff; }
-            100% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; border-color: #00f3ff; }
-        }
-        .neon-avatar {
-            border-radius: 50% !important;
-            border: 2px solid #00f3ff !important;
-            animation: neonPulse 1.5s infinite alternate ease-in-out !important;
-            object-fit: cover !important;
-            width: 34px !important;
-            height: 34px !important;
-            cursor: pointer;
-        }
-
-        /* ETH Live Ticker */
-        .eth-ticker {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #00f3ff;
-            font-weight: bold;
-        }
-
-        /* Search, Filter & Sorting Bar */
-        .filter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 15px 20px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Fixed Search Input Text Color (Vibrant High-Contrast Cyan) */
-        .search-box input {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 243, 255, 0.5);
-            background: #121212 !important;
-            color: #00f3ff !important;
-            -webkit-text-fill-color: #00f3ff !important;
-            width: 240px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .search-box input::placeholder {
-            color: #888888 !important;
-            -webkit-text-fill-color: #888888 !important;
-        }
-        .search-box input:focus {
-            border-color: #00f3ff;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
-            background: #181818 !important;
-            color: #00f3ff !important;
-            -webkit-text-fill-color: #00f3ff !important;
-        }
-
-        .filter-btns {
-            display: flex;
-            gap: 8px;
-        }
-        .filter-btn {
-            padding: 8px 14px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(20, 20, 20, 0.8);
-            color: #ccc;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        }
-        .filter-btn.active, .filter-btn:hover {
-            background: #00f3ff;
-            color: #000;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-        }
-
-        /* High-Contrast Sort Select Dropdown */
-        .sort-select {
-            padding: 10px 36px 10px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 243, 255, 0.5);
-            background-color: #121212 !important;
-            color: #ffffff !important;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.3s ease;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='%2300f3ff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-        }
-        .sort-select:hover, .sort-select:focus {
-            border-color: #00f3ff;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
-        }
-        .sort-select option {
-            background-color: #1a1a1a !important;
-            color: #ffffff !important;
-            padding: 10px;
-        }
-
-        /* Modern Web3 Header Action Buttons */
-        .header-icon-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 0;
-        }
-        .header-icon-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
-            border-color: #00f3ff;
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
-            transform: translateY(-1px);
-        }
-
-        /* 3D Tilt Effect on NFT Card */
-        .nft-card {
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        /* Cyberpunk Mouse Trail Fix */
-        #cyber-cursor {
-            position: fixed;
-            width: 12px;
-            height: 12px;
-            background: #00f3ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            box-shadow: 0 0 12px #00f3ff, 0 0 20px #00f3ff;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.05s ease;
-            transform: translate(-50%, -50%);
-        }
-
-        /* Zoom Controls in Preview Modal */
-        .zoom-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .zoom-btn {
-            padding: 6px 14px;
-            background: #222;
-            border: 1px solid #555;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .zoom-btn:hover {
-            background: #00f3ff;
-            color: #000;
-        }
-
-        /* User Profile Modal Liked Items */
-        .liked-nft-chip {
-            display: inline-block;
-            background: rgba(0, 243, 255, 0.15);
-            border: 1px solid #00f3ff;
-            color: #fff;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin: 4px;
-        }
-    </style>
+    <!-- Three.js & Vanta Fog CDN for Animated Silver Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -332,14 +137,14 @@
 
     <!-- Fullscreen Interactive Zoom & HD Detail Preview Modal -->
     <div id="imagePreviewModal" class="admin-modal hidden">
-        <div class="preview-modal-content" style="max-width: 900px; text-align: center;">
+        <div class="preview-modal-content">
             <span id="closePreview" class="close-btn">&times;</span>
-            <div class="watermarked-image-container" style="overflow: hidden; position: relative; max-height: 70vh;">
+            <div class="watermarked-image-container">
                 <!-- Transparent Security Layer to Prevent Direct Right-Click Download -->
                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; z-index: 12;"></div>
                 
-                <img id="previewModalImg" src="" alt="NFT Preview" style="transition: transform 0.2s ease; transform-origin: center; max-width: 100%; height: auto;">
-                <div class="watermark-overlay" style="z-index: 15;">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
+                <img id="previewModalImg" src="" alt="NFT Preview">
+                <div class="watermark-overlay">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
             </div>
 
             <!-- Interactive Zoom Controls -->
