@@ -1,4 +1,4 @@
-// --- EXACT FIREBASE CONFIGURATION WITH NEW API KEY ---
+// --- EXACT FIREBASE CONFIGURATION WITH YOUR NEW API KEY ---
 const firebaseConfig = {
     apiKey: "AIzaSyDo_2erVoeb5Xz_dOfTUQ21C_cmOdq0cbw",
     authDomain: "kryptos-heritage.firebaseapp.com",
@@ -15,6 +15,16 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 
 const db = firebase.firestore();
 const auth = firebase.auth();
+
+// FUNCTION TO GENERATE HIGH-QUALITY DYNAMIC INITIAL AVATAR (SVG DATA URI)
+function generateInitialAvatar(char) {
+    const upperChar = char ? char.toUpperCase() : 'U';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+        <rect width="64" height="64" rx="32" fill="#0d111d"/>
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#00f3ff" font-family="Arial, sans-serif" font-weight="bold" font-size="32">${upperChar}</text>
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -103,9 +113,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             const userDisplayName = user.displayName || user.email.split('@')[0];
             currentUser = { uid: user.uid, displayName: userDisplayName, email: user.email, photoURL: user.photoURL };
+            
             if (userInfo) userInfo.classList.remove('hidden');
             if (googleSignInBtn) googleSignInBtn.classList.add('hidden');
-            if (userAvatar) userAvatar.src = currentUser.photoURL || 'profile 1.jpg';
+
+            // GENERATE USER INITIAL AVATAR BASED ON EMAIL
+            const initialChar = (currentUser.email || currentUser.displayName || 'U').charAt(0);
+            const avatarSrc = currentUser.photoURL || generateInitialAvatar(initialChar);
+
+            if (userAvatar) {
+                userAvatar.src = avatarSrc;
+                userAvatar.classList.add('neon-avatar');
+            }
             if (userName) userName.innerText = currentUser.displayName;
             if (loginModal) loginModal.classList.add('hidden');
             boostFollowersOnLogin();
@@ -126,13 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = authPassword.value.trim();
 
             if (!email || !password) {
-                alert('කරුණාකර Email සහ Password ඇතුළත් කරන්න.');
+                alert('Please enter your Email and Password.');
                 return;
             }
 
             auth.signInWithEmailAndPassword(email, password)
                 .then(() => {
-                    alert('සාර්ථකව ඇතුළු විය!');
+                    alert('Successfully signed in!');
                     if (loginModal) loginModal.classList.add('hidden');
                 })
                 .catch((error) => {
@@ -148,13 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = authPassword.value.trim();
 
             if (!email || !password) {
-                alert('කරුණාකර Email සහ Password ඇතුළත් කරන්න.');
+                alert('Please enter your Email and Password.');
                 return;
             }
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    alert('ගිණුම සාර්ථකව සාදන ලදී!');
+                    alert('Account created successfully!');
                     if (loginModal) loginModal.classList.add('hidden');
                 })
                 .catch((error) => {
@@ -169,13 +188,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = authEmail.value.trim();
 
             if (!email) {
-                alert('කරුණාකර Email ලිපිනය ඇතුළත් කර "Forgot Password?" ඔබන්න.');
+                alert('Please enter your Email address and click "Forgot Password?".');
                 return;
             }
 
             auth.sendPasswordResetEmail(email)
                 .then(() => {
-                    alert('Password Reset කිරීමට අදාළ Link එක ඔබගේ Email එකට යවන ලදී. කරුණාකර Inbox/Spam පරීක්ෂා කරන්න.');
+                    alert('Password reset link has been sent to your email. Please check your Inbox/Spam folder.');
                 })
                 .catch((error) => {
                     alert('Error: ' + error.message);
