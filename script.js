@@ -16,7 +16,6 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Web3 Sci-Fi Sound Generator via Web Audio API
 let soundMuted = false;
 function playSciFiSound(freq = 440, duration = 0.08) {
     if (soundMuted) return;
@@ -35,7 +34,6 @@ function playSciFiSound(freq = 440, duration = 0.08) {
     } catch (e) {}
 }
 
-// FUNCTION TO GENERATE DYNAMIC INITIAL AVATAR (SVG DATA URI)
 function generateInitialAvatar(char) {
     const upperChar = char ? char.toUpperCase() : 'U';
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
@@ -47,7 +45,6 @@ function generateInitialAvatar(char) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- REMOVE PRELOADER AFTER PAGE LOAD ---
     setTimeout(() => {
         const preloader = document.getElementById('pagePreloader');
         if (preloader) {
@@ -56,11 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 800);
 
-    // PREVENT RIGHT CLICK AND IMAGE DRAGGING GLOBALLY
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
 
-    // --- MOUSE HOVER STAR DUST PARTICLES ---
     document.addEventListener('mousemove', (e) => {
         if (Math.random() < 0.2) {
             const particle = document.createElement('div');
@@ -72,13 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- INITIALIZE BACKGROUND MUSIC (CYBER-BGM.MP3 AT 30% VOLUME) ---
     const bgAudio = document.getElementById('bgAudio');
     const audioVisualizer = document.getElementById('audioVisualizer');
 
     if (bgAudio) {
-        bgAudio.volume = 0.3; // 30% Ambient Volume
-        
+        bgAudio.volume = 0.3;
         const startMusicOnInteraction = () => {
             if (!soundMuted && bgAudio.paused) {
                 bgAudio.play().then(() => {
@@ -90,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', startMusicOnInteraction);
     }
 
-    // --- INITIALIZE VANTA FOG SILVER BACKGROUND ANIMATION ---
     if (window.VANTA && window.VANTA.FOG) {
         window.VANTA.FOG({
             el: "#vanta-bg",
@@ -108,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- CYBERPUNK MOUSE CURSOR TRAIL FIX ---
     const cursor = document.getElementById('cyber-cursor');
     if (cursor) {
         document.addEventListener('mousemove', (e) => {
@@ -121,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SOUND TOGGLE BUTTON ---
     const soundToggleBtn = document.getElementById('soundToggleBtn');
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', () => {
@@ -137,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- LIVE ETH PRICE TICKER (CoinGecko API) ---
     let currentEthUsdPrice = 2650.00;
     function fetchLiveEthPrice() {
         fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
@@ -155,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLiveEthPrice();
     setInterval(fetchLiveEthPrice, 60000);
 
-    // --- REALTIME LIVE USERS & FOLLOWERS LOGIC ---
     const liveUsersEl = document.getElementById('dynamicLiveUsers');
     const followersEl = document.getElementById('dynamicFollowers');
     
@@ -211,14 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginModal = document.getElementById('loginModal');
     const closeLoginModal = document.getElementById('closeLoginModal');
 
-    // EMAIL AUTH ELEMENTS
     const authEmail = document.getElementById('authEmail');
     const authPassword = document.getElementById('authPassword');
     const emailSignInBtn = document.getElementById('emailSignInBtn');
     const emailSignUpBtn = document.getElementById('emailSignUpBtn');
     const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
 
-    // SEARCH & FILTER STATE
     let currentSearchQuery = "";
     let currentFilterCategory = "all";
     let currentSortOption = "newest";
@@ -395,12 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.baseLikes = generateUniqueRandomLikes();
                     db.collection("nfts").doc(doc.id).update({ baseLikes: data.baseLikes });
                 }
-                
-                // AUTOMATICALLY SET EXISTING NFTS TO "Sold Out"
-                if (data.status !== "Sold Out") {
-                    db.collection("nfts").doc(doc.id).update({ status: "Sold Out" });
-                    data.status = "Sold Out";
-                }
 
                 liveNFTs.push({ id: doc.id, ...data });
             });
@@ -412,7 +392,6 @@ document.addEventListener('DOMContentLoaded', () => {
             liveCollectors = [];
             snapshot.forEach((doc) => liveCollectors.push({ id: doc.id, ...doc.data() }));
             
-            // IF NO COLLECTORS EXIST YET, AUTO-POPULATE THE 2 DEFAULT COLLECTORS WITH TINY PRICES
             if (liveCollectors.length === 0 && liveNFTs.length >= 2) {
                 db.collection("collectors").add({
                     name: "Alex Vance",
@@ -471,6 +450,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const base = item.baseLikes || 125000;
                     const totalLikes = base + (likedByArray.length);
 
+                    const statusClass = item.status === 'Available' ? 'badge-available' : 'badge-sold';
+                    const statusText = item.status === 'Available' ? 'Available' : 'Sold Out';
+
                     return `
                         <div class="nft-card glassmorphism" onmousemove="handleCardTilt(event, this)" onmouseleave="resetCardTilt(this)">
                             <div class="nft-img-wrapper" onclick="openPreview('${item.img}', '${item.title}')">
@@ -483,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${isLongStory ? `<button class="read-more-btn" id="btn-${idx}" onclick="toggleReadMore(${idx}, '${encodeURIComponent(item.story)}')">More</button>` : ''}
                             </div>
                             <div class="card-footer-action">
-                                <span class="badge badge-sold">Sold Out</span>
+                                <span class="badge ${statusClass}">${statusText}</span>
                                 <div style="display:flex; gap: 6px; align-items:center;">
                                     <button class="outline-like-btn ${isLiked ? 'liked' : ''}" onclick="handleLike('${item.id}')">
                                         <svg class="heart-icon" viewBox="0 0 24 24">
@@ -658,10 +640,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="admin-item-row">
                     <div class="admin-item-info">
                         <span class="admin-item-title">${item.title}</span>
-                        <span style="font-size:0.75rem; color:${item.status === 'Available' ? '#00ff66' : '#ff3333'};">${item.status}</span>
+                        <span style="font-size:0.75rem; color:${item.status === 'Available' ? '#00ff66' : '#ff3333'};">${item.status || 'Available'}</span>
                     </div>
                     <div class="admin-item-actions">
-                        <button class="action-btn btn-toggle" onclick="toggleNftStatus('${item.id}', '${item.status}')">Toggle Status</button>
+                        <button class="action-btn btn-toggle" onclick="toggleNftStatus('${item.id}', '${item.status || 'Available'}')">Toggle Status</button>
                         <button class="action-btn btn-delete" onclick="deleteNft('${item.id}')">Delete</button>
                     </div>
                 </div>
