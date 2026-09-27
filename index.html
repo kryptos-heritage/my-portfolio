@@ -6,21 +6,13 @@
     <title>Kryptos Heritage | Premium NFT Portfolio</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- Neon Pulsing Light Animation for Logged-In User Profile Avatar -->
+    <!-- Premium Web3 Styling & Interactive Animations -->
     <style>
+        /* Neon Avatar Animation */
         @keyframes neonPulse {
-            0% {
-                box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 15px #00f3ff;
-                border-color: #00f3ff;
-            }
-            50% {
-                box-shadow: 0 0 2px #0066ff, 0 0 5px #0066ff, 0 0 8px #0066ff;
-                border-color: #0066ff;
-            }
-            100% {
-                box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 15px #00f3ff;
-                border-color: #00f3ff;
-            }
+            0% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; border-color: #00f3ff; }
+            50% { box-shadow: 0 0 2px #0066ff, 0 0 5px #0066ff; border-color: #0066ff; }
+            100% { box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff; border-color: #00f3ff; }
         }
         .neon-avatar {
             border-radius: 50% !important;
@@ -29,6 +21,136 @@
             object-fit: cover !important;
             width: 34px !important;
             height: 34px !important;
+            cursor: pointer;
+        }
+
+        /* ETH Live Ticker */
+        .eth-ticker {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #00f3ff;
+            font-weight: bold;
+        }
+
+        /* Search, Filter & Sorting Bar */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .search-box input {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #111;
+            color: #fff;
+            width: 240px;
+            font-size: 0.9rem;
+        }
+        .filter-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .filter-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(20, 20, 20, 0.8);
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: #00f3ff;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+        }
+        .sort-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #111;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        /* 3D Tilt Effect on NFT Card */
+        .nft-card {
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Cyberpunk Glowing Mouse Trail */
+        #cyber-cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: #00f3ff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            box-shadow: 0 0 12px #00f3ff, 0 0 20px #00f3ff;
+            transition: transform 0.05s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Zoom Controls in Preview Modal */
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .zoom-btn {
+            padding: 6px 14px;
+            background: #222;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .zoom-btn:hover {
+            background: #00f3ff;
+            color: #000;
+        }
+
+        /* Sound Toggle Button */
+        .sound-btn {
+            background: transparent;
+            border: none;
+            color: #00f3ff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        /* User Profile Modal Liked Items */
+        .liked-nft-chip {
+            display: inline-block;
+            background: rgba(0, 243, 255, 0.15);
+            border: 1px solid #00f3ff;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 4px;
         }
     </style>
 
@@ -39,6 +161,9 @@
 </head>
 <body oncontextmenu="return false;">
 
+    <!-- Cyberpunk Glowing Mouse Cursor -->
+    <div id="cyber-cursor"></div>
+
     <!-- Silver Shifting Background Animation Container -->
     <div id="vanta-bg"></div>
 
@@ -48,18 +173,28 @@
             <h2 class="glow-text">KRYPTOS HERITAGE</h2>
         </div>
         <div class="header-right">
+            
+            <!-- Live ETH Ticker -->
+            <div class="eth-ticker">
+                <span>Ξ ETH:</span>
+                <span id="ethPriceDisplay">$2,650.00</span>
+            </div>
+
             <!-- Animated White Glowing Eye Icon for Live Status -->
             <span class="live-status">
                 <svg class="glowing-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
-                Live: <span id="dynamicLiveUsers">14</span> users | Followers: <span id="dynamicFollowers">150.4k</span>
+                Live: <span id="dynamicLiveUsers">14</span> | Followers: <span id="dynamicFollowers">150.4k</span>
             </span>
+
+            <!-- Web3 Sci-Fi Sound Toggle Button -->
+            <button id="soundToggleBtn" class="sound-btn" title="Toggle UI Sound Effects">🔊</button>
             
             <!-- User Profile / Sign in -->
             <div id="userInfo" class="user-info hidden">
-                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar neon-avatar" width="34" height="34">
+                <img id="userAvatar" src="" alt="User Avatar" class="user-avatar neon-avatar" width="34" height="34" title="Click to view Collector Profile">
                 <span id="userName" class="user-name"></span>
                 <button id="signOutBtn" class="action-btn btn-delete">Sign Out</button>
             </div>
@@ -95,6 +230,26 @@
         <!-- NFT Showcase Grid Section -->
         <section class="nft-section">
             <h2 class="section-title glow-text">Featured NFT Creations</h2>
+            
+            <!-- Interactive Search, Filter & Sorting Controls -->
+            <div class="filter-container glassmorphism">
+                <div class="search-box">
+                    <input type="text" id="nftSearchInput" placeholder="🔍 Search NFT by title...">
+                </div>
+                <div class="filter-btns">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Available">Available</button>
+                    <button class="filter-btn" data-filter="Sold Out">Sold Out</button>
+                </div>
+                <div>
+                    <select id="nftSortSelect" class="sort-select">
+                        <option value="newest">Sort: Newest First</option>
+                        <option value="popular">Sort: Most Popular (Likes)</option>
+                        <option value="title">Sort: Title (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
             <div id="nftGrid" class="nft-grid">
                 <!-- Dynamically Rendered -->
             </div>
@@ -113,15 +268,43 @@
 
     </main>
 
-    <!-- Fullscreen Image Preview Modal with Watermark Restored -->
+    <!-- Fullscreen Interactive Zoom & HD Detail Preview Modal -->
     <div id="imagePreviewModal" class="admin-modal hidden">
-        <div class="preview-modal-content">
+        <div class="preview-modal-content" style="max-width: 900px; text-align: center;">
             <span id="closePreview" class="close-btn">&times;</span>
-            <div class="watermarked-image-container">
-                <img id="previewModalImg" src="" alt="NFT Preview">
-                <div class="watermark-overlay">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
+            <div class="watermarked-image-container" style="overflow: hidden; position: relative; max-height: 70vh;">
+                <!-- Transparent Security Layer to Prevent Direct Right-Click Download -->
+                <div style="position: absolute; top:0; left:0; width:100%; height:100%; z-index: 12;"></div>
+                
+                <img id="previewModalImg" src="" alt="NFT Preview" style="transition: transform 0.2s ease; transform-origin: center; max-width: 100%; height: auto;">
+                <div class="watermark-overlay" style="z-index: 15;">KRYPTOS HERITAGE • PRASHAN LIYANAGE</div>
             </div>
+
+            <!-- Interactive Zoom Controls -->
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomInBtn">🔍 Zoom In (+)</button>
+                <button class="zoom-btn" id="zoomOutBtn">🔍 Zoom Out (-)</button>
+                <button class="zoom-btn" id="zoomResetBtn">↺ Reset Zoom</button>
+            </div>
+
             <h3 id="previewModalTitle" class="glow-text" style="margin-top: 15px;"></h3>
+        </div>
+    </div>
+
+    <!-- Logged-In User Profile Modal -->
+    <div id="userProfileModal" class="admin-modal hidden">
+        <div class="admin-content glassmorphism" style="max-width: 450px; text-align: center; padding: 25px; color: #fff;">
+            <span id="closeUserProfileModal" class="close-btn" style="float: right; cursor: pointer;">&times;</span>
+            <div id="modalUserAvatarContainer" style="margin-bottom: 15px;"></div>
+            <h3 id="modalUserName" class="glow-text">Collector Profile</h3>
+            <p id="modalUserEmail" style="color: #aaa; font-size: 0.85rem; margin-bottom: 15px;"></p>
+            <div style="background: rgba(0, 243, 255, 0.1); border: 1px solid #00f3ff; border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+                <span style="font-size: 0.9rem; font-weight: bold; color: #00f3ff;">💎 Verified Web3 Collector</span>
+            </div>
+            <h4>Liked NFT Creations</h4>
+            <div id="modalLikedNftsList" style="margin-top: 10px; max-height: 150px; overflow-y: auto;">
+                <!-- Dynamically Populated -->
+            </div>
         </div>
     </div>
 
