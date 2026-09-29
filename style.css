@@ -125,6 +125,7 @@ body {
     top: 0;
     z-index: 100;
     border-bottom: 1px solid rgba(0, 243, 255, 0.25);
+    flex-wrap: wrap;
 }
 
 .logo h2 {
@@ -136,7 +137,8 @@ body {
 .header-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .eth-ticker {
@@ -150,6 +152,7 @@ body {
     font-size: 0.82rem;
     color: #00f3ff;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .live-status {
@@ -158,6 +161,7 @@ body {
     gap: 6px;
     font-size: 0.82rem;
     color: #aaa;
+    white-space: nowrap;
 }
 
 .glowing-eye {
@@ -183,6 +187,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .header-icon-btn:hover {
@@ -232,6 +237,7 @@ body {
     font-weight: 600;
     font-size: 0.85rem;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .google-btn:hover {
@@ -592,10 +598,7 @@ body {
     fill: currentColor;
 }
 
-/* ============================================================
-   REDESIGNED LUXURY ADMIN PANEL (Professional & Sleek UI)
-   ============================================================ */
-
+/* LUXURY ADMIN PANEL */
 .admin-dashboard-box {
     background: rgba(10, 13, 22, 0.96) !important;
     backdrop-filter: blur(20px);
@@ -892,4 +895,117 @@ body {
 
 .primary-btn:hover {
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+}
+
+/* ============================================================
+   MOBILE & TABLET RESPONSIVE TWEAKS (FIX FOR HEADER OVERFLOW)
+   ============================================================ */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 15px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .logo {
+        text-align: center;
+    }
+
+    .logo h2 {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .eth-ticker, .live-status {
+        font-size: 0.72rem;
+        padding: 4px 8px;
+    }
+
+    .header-icon-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .google-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .filter-btns {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .filter-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 4px;
+        font-size: 0.8rem;
+    }
+
+    .sort-select {
+        width: 100%;
+    }
+
+    .nft-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .collector-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+    }
+
+    .profile-bio {
+        font-size: 0.85rem;
+    }
+
+    .admin-dashboard-box {
+        width: 95% !important;
+        padding: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 10px;
+    }
+
+    .logo h2 {
+        font-size: 1.1rem;
+    }
+
+    .header-right {
+        gap: 6px;
+    }
+
+    .eth-ticker, .live-status {
+        font-size: 0.68rem;
+    }
+
+    .google-btn {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+    }
 }
